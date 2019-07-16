@@ -3,9 +3,7 @@ package com.ablog.api;
 import com.ablog.pojo.Category;
 import com.ablog.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,5 +27,23 @@ public class CategoryAPI {
 
     }
 
+    @PostMapping("/api/category/delete")
+    public void delete(@RequestBody Category category){
+
+        categoryService.delete(category);
+
+    }
+
+    @GetMapping("/api/category/query")
+    public List<Category> query(){
+
+        List<Category> categories = categoryService.query();
+        for (Category category:
+             categories) {
+            System.out.println(category.toString());
+        }
+        return categories;
+
+    }
 
 }

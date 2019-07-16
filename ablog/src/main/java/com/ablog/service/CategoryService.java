@@ -21,7 +21,24 @@ public class CategoryService {
 
     public void save(Category category) {
 
-        categoryDAO.save(category);
+        categoryDAO.saveAndFlush(category);
+
+    }
+
+    public void delete(Category category) {
+
+        System.out.println(category.toString());
+        categoryDAO.delete(category);
+
+    }
+
+    public List<Category> query() {
+
+//        Category category = new Category();
+//        category.setCategoryName(query);
+//        ExampleMatcher exampleMatcher = ExampleMatcher.matching().withMatcher("categoryName",ExampleMatcher.GenericPropertyMatchers.contains());
+//        Example<Category> example = Example.of(category,exampleMatcher);
+        return categoryDAO.findAll();
 
     }
 }

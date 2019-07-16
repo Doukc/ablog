@@ -30,8 +30,8 @@
                     </el-tag>
                   </span>
                   <el-dropdown-menu  slot="dropdown">
-                    <el-dropdown-item @click.native="modifyCategory(item[0])">修改</el-dropdown-item>
-                    <el-dropdown-item @click="deleteCategory">删除</el-dropdown-item>
+                    <el-dropdown-item @click.native="modifyCategory(item[0],item[1])">修改</el-dropdown-item>
+                    <el-dropdown-item @click.native="deleteCategory(item[0])">删除</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </span>
@@ -63,6 +63,8 @@
         <div class="text item" style="text-align: left">
           <el-input v-model="categoryName" placeholder="请输入分类名称" style="width: 300px"></el-input>
           <el-button type="primary" @click="saveCategory">保存分类</el-button>
+          <el-input v-model="categoryTagName" placeholder="请输入标签名称" style="width: 300px;padding-left: 100px"></el-input>
+          <el-button type="primary" @click="saveCategoryTag">保存标签</el-button>
         </div>
       </el-card>
     </div>
@@ -76,6 +78,7 @@ export default {
     return {
       categories: [],
       categoryName: '',
+      categoryTagName: '',
       category: []
     }
   },
@@ -92,18 +95,50 @@ export default {
     },
     saveCategory () {
       this.$axios.post('/category/save', {
+        id: this.category.id,
         categoryName: this.categoryName,
         categoryType: 0
       }).then(resp => {
         if (resp && resp.status === 200) {
-          this.$alert('添加成功', null)
+          this.$message({
+            message: '保存成功',
+            type: 'success'
+          })
+          this.categoryName = ''
+          this.loadCategories()
         }
       })
     },
-    modifyCategory (cid) {
-      this.$axios.get('/category/update/' + cid).then(resp => {
+    saveCategoryTag () {
+      this.$axios.post('/category/save', {
+        id: this.category.id,
+        categoryName: this.categoryTagName,
+        categoryType: 1
+      }).then(resp => {
         if (resp && resp.status === 200) {
-          this.categories = resp.data
+          this.$message({
+            message: '保存成功',
+            type: 'success'
+          })
+          this.categoryTagName = ''
+          this.loadCategories()
+        }
+      })
+    },
+    modifyCategory (cid, categoryName) {
+      this.category.id = cid
+      this.categoryName = categoryName
+    },
+    deleteCategory (cid) {
+      this.$axios.post('/category/delete', {
+        id: cid
+      }).then(resp => {
+        if (resp && resp.status === 200) {
+          this.$message({
+            message: '删除成功',
+            type: 'success'
+          })
+          this.loadCategories()
         }
       })
     }

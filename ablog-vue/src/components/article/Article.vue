@@ -9,7 +9,7 @@
           <span v-if="article.category != null">/{{article.category}}</span>
         </span>
         <br/><br/>
-        <el-tag style="border-radius:20px;" size="small" type="success" effect="dark">#测试标签</el-tag>
+        <el-tag style="border-radius:20px;border: none;margin-right: 10px" size="small" :color="'rgb(' + Math.floor(Math.random() * 50 + 180) + ',' + Math.floor(Math.random() * 50 + 180) + ',' + Math.floor(Math.random() * 50 + 180) + ')'" effect="dark" v-for="(item,key) in article.categoryList" :key="key" v-if="item.categoryType === 1">#{{item.categoryName}}</el-tag>
       </div>
       <div class="markdown-body" >
         <div class="content" v-html="article.html"></div>

@@ -15,7 +15,23 @@
       </el-form-item>
       <el-form-item style="width: auto">
         <el-col :span="12">
-          <el-input v-model="form.tag" placeholder="请输入文章标签" style="width: 720px"></el-input>
+          <el-select
+            v-model="tagValue"
+            multiple
+            filterable
+            remote
+            reserve-keyword
+            placeholder="请输入文章标签"
+            :remote-method="selectTagCategories"
+            :loading="tagLoading"
+            style="width: 720px">
+            <el-option
+              v-for="item in tagOptions"
+              :key="item.value"
+              :label="item.codeValue"
+              :value="item.value">
+            </el-option>
+          </el-select>
         </el-col>
         <el-col :span="12">
           <el-select
@@ -24,14 +40,15 @@
             filterable
             remote
             reserve-keyword
-            placeholder="请输入关键词"
-            :remote-method="remoteMethod"
+            multiple-limit="1"
+            placeholder="请输入文章分类"
+            :remote-method="selectCategories"
             :loading="loading"
             style="width: 720px">
             <el-option
               v-for="item in options"
               :key="item.value"
-              :label="item.label"
+              :label="item.codeValue"
               :value="item.value">
             </el-option>
           </el-select>
@@ -133,12 +150,15 @@ import AxiosConfig from '../config/AxiosConfig'
 export default {
   data () {
     return {
-      options: [],
-      value: [],
-      list: [],
       loading: false,
+      options: [],
+      list: [],
+      tagLoading: false,
+      tagOptions: [],
+      tagList: [],
       hasCover: false,
-      states: [],
+      value: [],
+      tagValue: [],
       form: {
         title: '',
         tag: '',
@@ -158,15 +178,39 @@ export default {
     }
   },
   mounted () {
+    this.loadCategories()
   },
   methods: {
-    remoteMethod (query) {
+    loadCategories () {
+      this.$axios.get('/category/query').then(resp => {
+        if (resp.status === 200) {
+          for (var i = 0; i < resp.data.length; i++) {
+            if (resp.data[i].categoryType === 0) {
+              let obj = {}
+              obj.value = resp.data[i].id
+              obj.codeValue = resp.data[i].categoryName
+              this.list.push(obj)
+            } else {
+              let obj = {}
+              obj.value = resp.data[i].id
+              obj.codeValue = resp.data[i].categoryName
+              this.tagList.push(obj)
+            }
+          }
+        } else {
+          this.list = []
+        }
+        this.options = this.list
+        this.tagOptions = this.tagList
+      })
+    },
+    selectCategories (query) {
       if (query !== '') {
         this.loading = true
         setTimeout(() => {
           this.loading = false
           this.options = this.list.filter(item => {
-            return item.label.toLowerCase()
+            return item.codeValue.toLowerCase()
               .indexOf(query.toLowerCase()) > -1
           })
         }, 200)
@@ -174,9 +218,23 @@ export default {
         this.options = []
       }
     },
+    selectTagCategories (query) {
+      if (query !== '') {
+        this.tagLoading = true
+        setTimeout(() => {
+          this.tagLoading = false
+          this.tagOptions = this.tagList.filter(item => {
+            return item.codeValue.toLowerCase()
+              .indexOf(query.toLowerCase()) > -1
+          })
+        }, 200)
+      } else {
+        this.tagOptions = []
+      }
+    },
     onSubmit () {
       this.$axios
-        .post('/article/new', {
+        .post('/article/new/' + this.value + '/' + this.tagValue, {
           title: this.form.title,
           tag: this.form.tag,
           doc: this.form.doc,

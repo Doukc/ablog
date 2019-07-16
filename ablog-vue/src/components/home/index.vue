@@ -1,7 +1,7 @@
 <template>
   <div style="padding-top: 50px;padding-bottom: 100px;background-color: #f7f7f7;">
     <div style="width: 810px;margin: 0 auto;">
-      <el-row type="flex" justify="center" align="center">
+      <el-row style="display: flow-root;" type="flex" justify="center" align="center">
         <el-col :span="8" v-for="(item,index) in article" v-if="index<3" :key="index">
           <el-card shadow="hover" :body-style="{ padding: '0px' }">
             <el-tooltip placement="bottom">
@@ -15,11 +15,11 @@
             </el-tooltip>
             <div align="left" style="padding: 14px;">
               <a href="#">
-                <span style="font-family: 'Arial'">{{item.title}}</span>
+                <span style="font-family: 'Arial'" @click="articleDetail(item.id)">{{item.title}}</span>
               </a>
               <div align="right" class="bottom clearfix">
                 <a href="#">
-                  <span style="font-size: 5px">默认分类</span>
+                  <span style="font-size: 5px" v-for="(i,key) in item.categoryList" :key="key" v-if="i.categoryType === 0">{{i.categoryName}}</span>
                 </a>
                 <i class="el-icon-paperclip" style="font-size: 22px;"></i>
               </div>
@@ -27,7 +27,7 @@
           </el-card>
         </el-col>
       </el-row>
-      <el-row type="flex" justify="center" align="center">
+      <el-row style="display: flow-root;" type="flex" justify="center" align="center">
         <el-col :span="8" v-for="(item,index) in article" v-if="index>=3 && index<6" :key="index">
           <el-card shadow="hover" :body-style="{ padding: '0px' }">
             <el-tooltip placement="bottom">
@@ -53,7 +53,7 @@
           </el-card>
         </el-col>
       </el-row>
-      <el-row type="flex" justify="center" align="center">
+      <el-row style="display: flow-root;" type="flex" justify="center" align="center">
         <el-col :span="8" v-for="(item,index) in article" v-if="index>=6 && index<9" :key="index">
           <el-card shadow="hover" :body-style="{ padding: '0px' }">
             <el-tooltip placement="bottom">
@@ -134,6 +134,9 @@ export default {
       //     this.$router.push({path: '/article/detail'})
       //   }
       // })
+    },
+    test2 (item) {
+      return item
     }
   }
 }

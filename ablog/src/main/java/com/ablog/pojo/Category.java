@@ -1,6 +1,10 @@
 package com.ablog.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "CATEGORY")
@@ -14,6 +18,9 @@ public class Category {
     private String categoryName;
     @Column(name = "CATEGORY_TYPE")
     private int categoryType;
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.REFRESH,mappedBy = "categoryList")
+    private List<Article> articleList;
 
     public int getId() {
         return id;
@@ -37,6 +44,14 @@ public class Category {
 
     public void setCategoryType(int categoryType) {
         this.categoryType = categoryType;
+    }
+
+    public List<Article> getArticleList() {
+        return articleList;
+    }
+
+    public void setArticleList(List<Article> articleList) {
+        this.articleList = articleList;
     }
 
     @Override

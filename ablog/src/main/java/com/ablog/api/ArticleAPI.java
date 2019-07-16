@@ -27,10 +27,10 @@ public class ArticleAPI {
 
     }
 
-    @PostMapping("/api/article/new")
-    public Result newArticle(@RequestBody Article article){
+    @PostMapping("/api/article/new/{value}/{tagValue}")
+    public Result newArticle(@RequestBody Article article,@PathVariable("value") String[] value,@PathVariable("tagValue") String[] tagValue){
 
-        Article newArticle = articleService.newArticle(article);
+        Article newArticle = articleService.newArticle(article,value,tagValue);
         if (newArticle != null){
             return ResultFactory.buildSuccessResult(null);
         }
