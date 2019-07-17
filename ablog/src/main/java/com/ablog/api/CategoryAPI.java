@@ -20,6 +20,13 @@ public class CategoryAPI {
 
     }
 
+    @PostMapping("/api/category/categoryList")
+    public List categories(@RequestBody Category category){
+
+        return categoryService.categories(category);
+
+    }
+
     @PostMapping("/api/category/save")
     public void save(@RequestBody Category category){
 
@@ -38,10 +45,6 @@ public class CategoryAPI {
     public List<Category> query(){
 
         List<Category> categories = categoryService.query();
-        for (Category category:
-             categories) {
-            System.out.println(category.toString());
-        }
         return categories;
 
     }

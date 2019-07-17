@@ -1,6 +1,7 @@
 package com.ablog.api;
 
 import com.ablog.pojo.Article;
+import com.ablog.pojo.Category;
 import com.ablog.result.Result;
 import com.ablog.result.ResultFactory;
 import com.ablog.service.ArticleService;
@@ -10,9 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @RestController
 public class ArticleAPI {
@@ -38,11 +36,23 @@ public class ArticleAPI {
 
     }
 
-    @GetMapping("/api/article/list/{currentPage}/{pageSize}")
+    @PostMapping("/api/article/articles/{currentPage}/{pageSize}")
     public Page<Article> articleList(@PathVariable("currentPage") int currentPage, @PathVariable("pageSize") int pageSize){
 
         Pageable pageable = new PageRequest(currentPage - 1,pageSize,Sort.Direction.DESC,"createTime");
-        Page<Article> articlePage = articleService.articleList(pageable);
+        Page<Article> articlePage = articleService.articles(pageable);
+        return articlePage;
+
+    }
+    @PostMapping("/api/article/list/{currentPage}/{pageSize}/{categoryId}")
+    public Page<Article> articleList(@PathVariable("currentPage") int currentPage, @PathVariable("pageSize") int pageSize,@PathVariable("categoryId") int categoryId, @RequestBody Article article){
+
+        Category category = new Category();
+        if (categoryId != 0){
+            category.setId(categoryId);
+        }
+        Pageable pageable = new PageRequest(currentPage - 1,pageSize,Sort.Direction.DESC,"createTime");
+        Page<Article> articlePage = articleService.articleList(article,category,pageable);
         return articlePage;
 
     }

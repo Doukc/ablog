@@ -1,5 +1,5 @@
 <template>
-  <div style="padding-top: 50px;padding-bottom: 100px;background-color: #f7f7f7;">
+  <div class="box animated fadeIn" style="padding-top: 50px;padding-bottom: 100px;background-color: #f7f7f7;">
     <div style="width: 810px;margin: 0 auto;">
       <el-row style="display: flow-root;" type="flex" justify="center" align="center">
         <el-col :span="8" v-for="(item,index) in article" v-if="index<3" :key="index">
@@ -109,7 +109,7 @@ export default {
   },
   methods: {
     loadArticles () {
-      this.$axios.get('/article/list/1/9').then(resp => {
+      this.$axios.post('/article/articles/' + this.currentPage + '/9').then(resp => {
         if (resp && resp.status === 200) {
           this.pager = resp.data
           this.totalRecord = resp.data.totalElements
@@ -119,24 +119,10 @@ export default {
     },
     handleCurrentChange (currentPage) {
       this.currentPage = currentPage
-      this.$axios.get('/article/list/' + currentPage + '/9').then(resp => {
-        if (resp && resp.status === 200) {
-          this.pager = resp.data
-          this.totalRecord = resp.data.totalElements
-          this.article = resp.data.content
-        }
-      })
+      this.loadArticles()
     },
     articleDetail (id) {
       this.$router.push({path: '/article/detail', query: {id: id}})
-      // this.$axios.get('/article/' + this.article.id).then(resp => {
-      //   if (resp && resp.status === 200) {
-      //     this.$router.push({path: '/article/detail'})
-      //   }
-      // })
-    },
-    test2 (item) {
-      return item
     }
   }
 }

@@ -6,12 +6,14 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import Axios from './components/config/AxiosConfig'
+import animated from 'animate.css'
 
 var axios = require('axios')
 axios.defaults.baseURL = Axios.axiosBaseURL
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
+Vue.use(animated)
 Vue.prototype.$axios = axios
 
 /* eslint-disable no-new */
