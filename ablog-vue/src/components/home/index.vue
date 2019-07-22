@@ -18,8 +18,8 @@
                 <span style="font-family: 'Arial'" @click="articleDetail(item.id)">{{item.title}}</span>
               </a>
               <div align="right" class="bottom clearfix">
-                <a href="#">
-                  <span style="font-size: 5px" v-for="(i,key) in item.categoryList" :key="key" v-if="i.categoryType === 0">{{i.categoryName}}</span>
+                <a :href="'/categories?id=' + i.id + '&categoryName=' + i.categoryName + '&categoryType=' + i.categoryType" v-for="(i,key) in item.categoryList" :key="key" v-if="i.categoryType === 0">
+                  <span style="font-size: 5px" >{{i.categoryName}}</span>
                 </a>
                 <i class="el-icon-paperclip" style="font-size: 22px;"></i>
               </div>
@@ -44,8 +44,8 @@
                 <span style="font-family: 'Arial'">{{item.title}}</span>
               </a>
               <div align="right" class="bottom clearfix">
-                <a href="#">
-                  <span style="font-size: 5px">默认分类</span>
+                <a :href="'/categories?id=' + i.id + '&categoryName=' + i.categoryName + '&categoryType=' + i.categoryType" v-for="(i,key) in item.categoryList" :key="key" v-if="i.categoryType === 0">
+                  <span style="font-size: 5px" >{{i.categoryName}}</span>
                 </a>
                 <i class="el-icon-paperclip" style="font-size: 22px;"></i>
               </div>
@@ -70,8 +70,8 @@
                 <span style="font-family: 'Arial'">{{item.title}}</span>
               </a>
               <div align="right" class="bottom clearfix">
-                <a href="#">
-                  <span style="font-size: 5px">默认分类</span>
+                <a :href="'/categories?id=' + i.id + '&categoryName=' + i.categoryName + '&categoryType=' + i.categoryType" v-for="(i,key) in item.categoryList" :key="key" v-if="i.categoryType === 0">
+                  <span style="font-size: 5px" >{{i.categoryName}}</span>
                 </a>
                 <i class="el-icon-paperclip" style="font-size: 22px;"></i>
               </div>

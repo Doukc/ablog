@@ -7,6 +7,7 @@ import com.ablog.pojo.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -33,11 +34,38 @@ public class ArticleService {
         }
         for (String cid :
                 tagValue) {
-            category = categoryDAO.getOne(Integer.valueOf(cid));
-            categories.add(category);
+            if (!cid.equals("0")) {
+                category = categoryDAO.getOne(Integer.valueOf(cid));
+                categories.add(category);
+            }else {
+                continue;
+            }
         }
         article.setCategoryList(categories);
         return articleDAO.save(article);
+
+    }
+
+    public Article modifyArticle(Article article, String[] value, String[] tagValue){
+
+        List<Category> categories = new ArrayList<Category>();
+        Category category = null;
+        for (String cid :
+                value) {
+            category = categoryDAO.getOne(Integer.valueOf(cid));
+            categories.add(category);
+        }
+        for (String cid :
+                tagValue) {
+            if (!cid.equals("0")) {
+                category = categoryDAO.getOne(Integer.valueOf(cid));
+                categories.add(category);
+            }else {
+                continue;
+            }
+        }
+        article.setCategoryList(categories);
+        return articleDAO.saveAndFlush(article);
 
     }
 
@@ -81,6 +109,21 @@ public class ArticleService {
     public Article findArticleById(int id) {
 
         return articleDAO.findById(id).get();
+
+    }
+
+    public void delete(int id) {
+
+        articleDAO.deleteById(id);
+
+    }
+
+    public List<Article> getArticlesByCid(Category category) {
+
+        Sort sort = new Sort(Sort.Direction.DESC,"createTime");
+        List<Category> categoryList = new ArrayList<Category>();
+        categoryList.add(category);
+        return articleDAO.findArticlesByCategoryList(categoryList,sort);
 
     }
 }

@@ -136,8 +136,8 @@
       </el-form-item>
       <div align="right">
         <el-button type="primary" icon="el-icon-back">返回列表</el-button>
-        <el-button type="primary" icon="el-icon-folder-add" style="background-color: #6e8cd7;border: 1px solid #6e8cd7" @click="onSubmit">发布文章</el-button>
-        <el-button type="primary" icon="el-icon-tickets" style="background-color: #ffd740;border: 1px solid #ffd740;color: black">存为草稿</el-button>
+        <el-button type="primary" icon="el-icon-folder-add" style="background-color: #6e8cd7;border: 1px solid #6e8cd7" @click="onSubmit(0)">发布文章</el-button>
+        <el-button type="primary" icon="el-icon-tickets" style="background-color: #ffd740;border: 1px solid #ffd740;color: black" @click="onSubmit(1)">存为草稿</el-button>
       </div>
     </el-form>
   </el-card>
@@ -157,7 +157,9 @@ export default {
       tagOptions: [],
       tagList: [],
       hasCover: false,
-      value: [],
+      value: [
+        1
+      ],
       tagValue: [],
       form: {
         title: '',
@@ -232,7 +234,10 @@ export default {
         this.tagOptions = []
       }
     },
-    onSubmit () {
+    onSubmit (state) {
+      if (this.tagValue.length === 0) {
+        this.tagValue = '0'
+      }
       this.$axios
         .post('/article/new/' + this.value + '/' + this.tagValue, {
           title: this.form.title,
@@ -240,11 +245,16 @@ export default {
           doc: this.form.doc,
           html: this.$refs.editor.d_render,
           hasComments: this.form.hasComments,
+          state: state,
           cover: this.form.cover,
           createTime: this.form.createTime
         }).then(resp => {
           if (resp.data.code === 200) {
-            this.$alert('发布成功', null)
+            this.$message({
+              message: '发布成功',
+              type: 'success'
+            })
+            this.$router.replace({name: 'Articles'})
           }
         })
     },

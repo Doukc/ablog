@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class ArticleAPI {
 
@@ -27,6 +29,21 @@ public class ArticleAPI {
 
     @PostMapping("/api/article/new/{value}/{tagValue}")
     public Result newArticle(@RequestBody Article article,@PathVariable("value") String[] value,@PathVariable("tagValue") String[] tagValue){
+
+        for (String str :
+                tagValue) {
+            System.out.println(str);
+        }
+        Article newArticle = articleService.newArticle(article,value,tagValue);
+        if (newArticle != null){
+            return ResultFactory.buildSuccessResult(null);
+        }
+        return ResultFactory.buildFailResult("添加失败");
+
+    }
+
+    @PostMapping("/api/article/modify/{value}/{tagValue}")
+    public Result modifyArticle(@RequestBody Article article,@PathVariable("value") String[] value,@PathVariable("tagValue") String[] tagValue){
 
         Article newArticle = articleService.newArticle(article,value,tagValue);
         if (newArticle != null){
@@ -44,6 +61,7 @@ public class ArticleAPI {
         return articlePage;
 
     }
+
     @PostMapping("/api/article/list/{currentPage}/{pageSize}/{categoryId}")
     public Page<Article> articleList(@PathVariable("currentPage") int currentPage, @PathVariable("pageSize") int pageSize,@PathVariable("categoryId") int categoryId, @RequestBody Article article){
 
@@ -54,6 +72,20 @@ public class ArticleAPI {
         Pageable pageable = new PageRequest(currentPage - 1,pageSize,Sort.Direction.DESC,"createTime");
         Page<Article> articlePage = articleService.articleList(article,category,pageable);
         return articlePage;
+
+    }
+
+    @GetMapping("/api/article/delete/{id}")
+    public void delete(@PathVariable("id") int id){
+
+        articleService.delete(id);
+
+    }
+
+    @PostMapping("/api/article/getArticlesByCid")
+    public List<Article> getArticlesByCid(@RequestBody Category category){
+
+        return articleService.getArticlesByCid(category);
 
     }
 

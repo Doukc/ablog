@@ -27,6 +27,10 @@
             <span>其他管理</span>
           </template>
           <el-menu-item-group>
+            <el-menu-item index="/admin/comment/comments">
+              <i class="el-icon-chat-dot-round"></i>
+              <span>评论管理</span>
+            </el-menu-item>
             <el-menu-item index="/admin/category">
               <i class="el-icon-discount"></i>
               <span>分类/标签</span>

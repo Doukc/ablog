@@ -42,6 +42,11 @@ public class Article {
     //关联到从表的外键名：主表中用于关联的属性名+下划线+从表的主键列名,即CATEGORY_ID
     //主表就是关系维护端对应的表，从表就是关系被维护端对应的表
     private List<Category> categoryList;
+    @OneToMany(mappedBy = "article",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+    //级联保存、更新、删除、刷新;延迟加载。当删除用户，会级联删除该用户的所有文章
+    //拥有mappedBy注解的实体类为关系被维护端
+    //mappedBy="author"中的author是Article中的author属性
+    private List<Comment> comments;
 
     public int getId() {
         return id;
@@ -121,6 +126,14 @@ public class Article {
 
     public void setCategoryList(List<Category> categoryList) {
         this.categoryList = categoryList;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     @Override

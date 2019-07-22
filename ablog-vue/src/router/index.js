@@ -7,6 +7,9 @@ import NewArticle from '../components/article/NewArticle'
 import ArticleDetail from '../components/article/Article'
 import Category from '../components/category/Category'
 import Articles from '../components/article/Articles'
+import ModifyArticle from '../components/article/ModifyArticle'
+import Comments from '../components/comment/Comments'
+import Categories from '../components/category/Categories'
 
 Vue.use(Router)
 
@@ -32,8 +35,13 @@ export default new Router({
         },
         {
           path: '/article/detail',
-          name: ArticleDetail,
+          name: 'ArticleDetail',
           component: ArticleDetail
+        },
+        {
+          path: '/categories',
+          name: 'Categories',
+          component: Categories
         }
       ]
     },
@@ -56,6 +64,16 @@ export default new Router({
           path: '/admin/article/articles',
           name: 'Articles',
           component: Articles
+        },
+        {
+          path: '/admin/article/modify',
+          name: 'ModifyArticle',
+          component: ModifyArticle
+        },
+        {
+          path: '/admin/comment/comments',
+          name: 'Comments',
+          component: Comments
         }
       ]
     }
