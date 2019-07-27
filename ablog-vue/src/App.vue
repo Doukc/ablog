@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="box animated fadeIn">
     <router-view/>
   </div>
 </template>

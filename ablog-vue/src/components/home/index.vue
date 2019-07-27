@@ -1,101 +1,112 @@
 <template>
-  <div class="box animated fadeIn" style="padding-top: 50px;padding-bottom: 100px;background-color: #f7f7f7;">
-    <div style="width: 810px;margin: 0 auto;">
-      <el-row style="display: flow-root;" type="flex" justify="center" align="center">
-        <el-col :span="8" v-for="(item,index) in article" v-if="index<3" :key="index">
-          <el-card shadow="hover" :body-style="{ padding: '0px' }">
-            <el-tooltip placement="bottom">
-              <div slot="content">多行信息<br/>第二行信息</div>
-              <el-button style="width: 270px;height: 250px" @click="articleDetail(item.id)">
-                <el-image
-                  style="width: 270px; height: 250px"
-                  :src="item.cover"
-                  :fit="fit"></el-image>
-              </el-button>
-            </el-tooltip>
-            <div align="left" style="padding: 14px;">
-              <a href="#">
-                <span style="font-family: 'Arial'" @click="articleDetail(item.id)">{{item.title}}</span>
-              </a>
-              <div align="right" class="bottom clearfix">
-                <a :href="'/categories?id=' + i.id + '&categoryName=' + i.categoryName + '&categoryType=' + i.categoryType" v-for="(i,key) in item.categoryList" :key="key" v-if="i.categoryType === 0">
-                  <span style="font-size: 5px" >{{i.categoryName}}</span>
+  <div onload="loadArticles">
+    <div style="padding-top: 50px;padding-bottom: 100px;background-color: #f7f7f7;">
+      <div style="width: 810px;margin: 0 auto;">
+        <el-row style="display: flow-root;" type="flex" justify="center" align="center">
+          <el-col :span="8" v-for="(item,index) in article" v-if="index<3" :key="index">
+            <el-card class="box animated fadeIn" shadow="always" :body-style="{ padding: '0px' }" style="border-radius:10px;">
+              <el-tooltip placement="bottom">
+                <div slot="content" style="width: 220px">
+                  {{item.doc.slice(0,33)}} ...
+                </div>
+                <el-button style="width: 240px;height: 250px" @click="articleDetail(item.id)">
+                  <el-image
+                    style="width: 240px; height: 250px"
+                    :src="item.cover"
+                    :fit="fit"></el-image>
+                </el-button>
+              </el-tooltip>
+              <div align="left" style="padding: 14px;">
+                <a href="#">
+                  <span style="font-family: 'Arial'" @click="articleDetail(item.id)">{{item.title}}</span>
                 </a>
-                <i class="el-icon-paperclip" style="font-size: 22px;"></i>
+                <div align="right" class="bottom clearfix">
+                  <a :href="'/categories?id=' + i.id + '&categoryName=' + i.categoryName + '&categoryType=' + i.categoryType" v-for="(i,key) in item.categoryList" :key="key" v-if="i.categoryType === 0">
+                    <span style="font-size: 5px" >{{i.categoryName}}</span>
+                  </a>
+                  <i class="el-icon-paperclip" style="font-size: 22px;"></i>
+                </div>
               </div>
-            </div>
-          </el-card>
-        </el-col>
-      </el-row>
-      <el-row style="display: flow-root;" type="flex" justify="center" align="center">
-        <el-col :span="8" v-for="(item,index) in article" v-if="index>=3 && index<6" :key="index">
-          <el-card shadow="hover" :body-style="{ padding: '0px' }">
-            <el-tooltip placement="bottom">
-              <div slot="content">多行信息<br/>第二行信息</div>
-              <el-button style="width: 270px;height: 250px" @click="articleDetail(item.id)">
-                <el-image
-                  style="width: 270px; height: 250px"
-                  :src="item.cover"
-                  :fit="fit"></el-image>
-              </el-button>
-            </el-tooltip>
-            <div align="left" style="padding: 14px;">
-              <a href="#">
-                <span style="font-family: 'Arial'">{{item.title}}</span>
-              </a>
-              <div align="right" class="bottom clearfix">
-                <a :href="'/categories?id=' + i.id + '&categoryName=' + i.categoryName + '&categoryType=' + i.categoryType" v-for="(i,key) in item.categoryList" :key="key" v-if="i.categoryType === 0">
-                  <span style="font-size: 5px" >{{i.categoryName}}</span>
+            </el-card>
+          </el-col>
+        </el-row>
+        <el-row style="display: flow-root;" type="flex" justify="center" align="center">
+          <el-col :span="8" v-for="(item,index) in article" v-if="index>=3 && index<6" :key="index">
+            <el-card shadow="hover" :body-style="{ padding: '0px' }">
+              <el-tooltip placement="bottom">
+                <div slot="content" style="width: 220px">
+                  {{item.doc.slice(0,33)}} ...
+                </div>
+                <el-button style="width: 240px;height: 250px" @click="articleDetail(item.id)">
+                  <el-image
+                    style="width: 240px; height: 250px"
+                    :src="item.cover"
+                    :fit="fit"></el-image>
+                </el-button>
+              </el-tooltip>
+              <div align="left" style="padding: 14px;">
+                <a href="#">
+                  <span style="font-family: 'Arial'">{{item.title}}</span>
                 </a>
-                <i class="el-icon-paperclip" style="font-size: 22px;"></i>
+                <div align="right" class="bottom clearfix">
+                  <a :href="'/categories?id=' + i.id + '&categoryName=' + i.categoryName + '&categoryType=' + i.categoryType" v-for="(i,key) in item.categoryList" :key="key" v-if="i.categoryType === 0">
+                    <span style="font-size: 5px" >{{i.categoryName}}</span>
+                  </a>
+                  <i class="el-icon-paperclip" style="font-size: 22px;"></i>
+                </div>
               </div>
-            </div>
-          </el-card>
-        </el-col>
-      </el-row>
-      <el-row style="display: flow-root;" type="flex" justify="center" align="center">
-        <el-col :span="8" v-for="(item,index) in article" v-if="index>=6 && index<9" :key="index">
-          <el-card shadow="hover" :body-style="{ padding: '0px' }">
-            <el-tooltip placement="bottom">
-              <div slot="content">多行信息<br/>第二行信息</div>
-              <el-button style="width: 270px;height: 250px" @click="articleDetail(item.id)">
-                <el-image
-                  style="width: 270px; height: 250px"
-                  :src="item.cover"
-                  :fit="fit"></el-image>
-              </el-button>
-            </el-tooltip>
-            <div align="left" style="padding: 14px;">
-              <a href="#">
-                <span style="font-family: 'Arial'">{{item.title}}</span>
-              </a>
-              <div align="right" class="bottom clearfix">
-                <a :href="'/categories?id=' + i.id + '&categoryName=' + i.categoryName + '&categoryType=' + i.categoryType" v-for="(i,key) in item.categoryList" :key="key" v-if="i.categoryType === 0">
-                  <span style="font-size: 5px" >{{i.categoryName}}</span>
+            </el-card>
+          </el-col>
+        </el-row>
+        <el-row style="display: flow-root;" type="flex" justify="center" align="center">
+          <el-col :span="8" v-for="(item,index) in article" v-if="index>=6 && index<9" :key="index">
+            <el-card shadow="hover" :body-style="{ padding: '0px' }">
+              <el-tooltip placement="bottom">
+                <div slot="content" style="width: 220px">
+                  {{item.doc.slice(0,33)}} ...
+                </div>
+                <el-button style="width: 240px;height: 250px" @click="articleDetail(item.id)">
+                  <el-image
+                    style="width: 240px; height: 250px"
+                    :src="item.cover"
+                    :fit="fit"></el-image>
+                </el-button>
+              </el-tooltip>
+              <div align="left" style="padding: 14px;">
+                <a href="#">
+                  <span style="font-family: 'Arial'">{{item.title}}</span>
                 </a>
-                <i class="el-icon-paperclip" style="font-size: 22px;"></i>
+                <div align="right" class="bottom clearfix">
+                  <a :href="'/categories?id=' + i.id + '&categoryName=' + i.categoryName + '&categoryType=' + i.categoryType" v-for="(i,key) in item.categoryList" :key="key" v-if="i.categoryType === 0">
+                    <span style="font-size: 5px" >{{i.categoryName}}</span>
+                  </a>
+                  <i class="el-icon-paperclip" style="font-size: 22px;"></i>
+                </div>
               </div>
-            </div>
-          </el-card>
-        </el-col>
-      </el-row>
-      <el-pagination
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        style="padding: 20px"
-        :hide-on-single-page="value"
-        small="true"
-        layout="prev, pager, next"
-        page-size="9"
-        :total="totalRecord">
-      </el-pagination>
+            </el-card>
+          </el-col>
+        </el-row>
+        <el-pagination
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          style="padding: 20px"
+          :hide-on-single-page="value"
+          small="true"
+          layout="prev, pager, next"
+          page-size="9"
+          :total="totalRecord">
+        </el-pagination>
+      </div>
     </div>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
+import Footer from '../common/Footer'
 export default {
   name: 'Index',
+  components: {Footer},
   data () {
     return {
       pager: [],
@@ -103,6 +114,9 @@ export default {
       totalRecord: '',
       currentPage: 1
     }
+  },
+  component: {
+    Footer
   },
   mounted: function () {
     this.loadArticles()
