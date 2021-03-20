@@ -28,9 +28,9 @@ public class UploadAPI {
 
         String fileurl = "";
         //获取本机ip
-        String ip = IPUtil.getIpAddress();
+        //String ip = IPUtil.getServerIp();
         //拼装地址前缀  http://localhost:8081/+staticAccessPath+/+图片名称
-        String server_url = UploadUtil.getUrl(ip,this.port,this.file_url);
+        String server_url = UploadUtil.getUrl("123.57.247.177",this.port,this.file_url);
         try {
             fileurl = UploadUtil.uploadFile(uploadFolder,module,file);
         } catch (Exception e) {

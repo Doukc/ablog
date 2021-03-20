@@ -5,6 +5,11 @@ import com.ablog.pojo.Category;
 import com.ablog.result.Result;
 import com.ablog.result.ResultFactory;
 import com.ablog.service.ArticleService;
+import com.ablog.service.LogService;
+import com.ablog.utils.IPUtil;
+import com.alibaba.fastjson.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,13 +17,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
 public class ArticleAPI {
 
+    private static final Logger loggger = LoggerFactory.getLogger(ArticleAPI.class);
+
     @Autowired
     ArticleService articleService;
+    @Autowired
+    LogService logService;
 
     @PostMapping("/api/article")
     public Article article(@RequestBody Article article){
@@ -28,14 +38,11 @@ public class ArticleAPI {
     }
 
     @PostMapping("/api/article/new/{value}/{tagValue}")
-    public Result newArticle(@RequestBody Article article,@PathVariable("value") String[] value,@PathVariable("tagValue") String[] tagValue){
+    public Result newArticle(HttpServletRequest request,@RequestBody Article article, @PathVariable("value") String[] value, @PathVariable("tagValue") String[] tagValue ){
 
-        for (String str :
-                tagValue) {
-            System.out.println(str);
-        }
         Article newArticle = articleService.newArticle(article,value,tagValue);
         if (newArticle != null){
+            logService.log(IPUtil.getClientAddress(request),"文章管理","新增文章");
             return ResultFactory.buildSuccessResult(null);
         }
         return ResultFactory.buildFailResult("添加失败");
@@ -43,10 +50,11 @@ public class ArticleAPI {
     }
 
     @PostMapping("/api/article/modify/{value}/{tagValue}")
-    public Result modifyArticle(@RequestBody Article article,@PathVariable("value") String[] value,@PathVariable("tagValue") String[] tagValue){
+    public Result modifyArticle(HttpServletRequest request,@RequestBody Article article,@PathVariable("value") String[] value,@PathVariable("tagValue") String[] tagValue){
 
         Article newArticle = articleService.newArticle(article,value,tagValue);
         if (newArticle != null){
+            logService.log(IPUtil.getClientAddress(request),"文章管理","修改文章");
             return ResultFactory.buildSuccessResult(null);
         }
         return ResultFactory.buildFailResult("添加失败");
@@ -76,9 +84,10 @@ public class ArticleAPI {
     }
 
     @GetMapping("/api/article/delete/{id}")
-    public void delete(@PathVariable("id") int id){
+    public void delete(HttpServletRequest request,@PathVariable("id") int id){
 
         articleService.delete(id);
+        logService.log(IPUtil.getClientAddress(request),"文章管理","删除文章");
 
     }
 
@@ -86,6 +95,13 @@ public class ArticleAPI {
     public List<Article> getArticlesByCid(@RequestBody Category category){
 
         return articleService.getArticlesByCid(category);
+
+    }
+
+    @GetMapping("/api/article/allArticle")
+    public List<Article> allArticle(){
+
+        return  articleService.allArticle();
 
     }
 

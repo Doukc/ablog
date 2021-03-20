@@ -9,9 +9,11 @@
           <span v-if="article.category != null">/{{article.category}}</span>
         </span>
         <br/><br/>
-        <el-tag style="border-radius:20px;border: none;margin-right: 10px" size="small" :color="'rgb(' + Math.floor(Math.random() * 50 + 180) + ',' + Math.floor(Math.random() * 50 + 180) + ',' + Math.floor(Math.random() * 50 + 180) + ')'" effect="dark" v-for="(item,key) in article.categoryList" :key="key" v-if="item.categoryType === 1">
-          <a :href="'/categories?id=' + item.id + '&categoryName=' + item.categoryName + '&categoryType=' + item.categoryType">#{{item.categoryName}}</a>
-        </el-tag>
+        <template v-for="(item,key) in article.categoryList">
+          <el-tag style="border-radius:20px;border: none;margin-right: 10px" size="small" :color="'rgb(' + Math.floor(Math.random() * 50 + 180) + ',' + Math.floor(Math.random() * 50 + 180) + ',' + Math.floor(Math.random() * 50 + 180) + ')'" effect="dark"  :key="key" v-if="item.categoryType === 1">
+            <a :href="'/ui/categories?id=' + item.id + '&categoryName=' + item.categoryName + '&categoryType=' + item.categoryType">#{{item.categoryName}}</a>
+          </el-tag>
+        </template>
       </div>
       <div class="markdown-body" >
         <div class="content" v-html="article.html"></div>
@@ -52,36 +54,38 @@
         </div>
       </el-card>
       <div style="height: 30px"></div>
-      <el-card class="box-card" style="width: 680px;margin-bottom: 10px" v-for="(item,key) in comments" v-if="comments.length !== 0 && item.state !== 0" :key="key">
-        <div class="text-item" v-if="item.state === 1">
-          <div style="display: flex">
-            <img style="height: 38px;width: 38px;padding: 1px 1px 1px 1px;border-radius:50%" src="/static/image/comment_avatar.jpg"/>
-            <span style="padding-top: 9px;padding-left: 10px;font-size: 13px">{{item.commentatorName}}</span>
+      <template v-for="(item,key) in comments">
+        <el-card class="box-card" style="width: 680px;margin-bottom: 10px"  v-if="comments.length !== 0 && item.state !== 0" :key="key">
+          <div class="text-item" v-if="item.state === 1">
+            <div style="display: flex">
+              <img style="height: 38px;width: 38px;padding: 1px 1px 1px 1px;border-radius:50%" src="/static/image/comment_avatar.jpg"/>
+              <span style="padding-top: 9px;padding-left: 10px;font-size: 13px">{{item.commentatorName}}</span>
+            </div>
+            <div style="height: 5px"></div>
+            <div style="display: flex;text-align: left">
+              <span style="font-size: 14px">{{item.content}}</span>
+            </div>
+            <div style="height: 15px"></div>
+            <div style="display: flex">
+              <span style="font-size: 10px">{{new Date(item.time).getTime() | formatDate}}</span>
+            </div>
           </div>
-          <div style="height: 5px"></div>
-          <div style="display: flex;text-align: left">
-            <span style="font-size: 14px">{{item.content}}</span>
+          <div class="text-item" v-if="item.state === 2">
+            <div style="display: flex">
+              <img style="height: 38px;width: 38px;padding: 1px 1px 1px 1px;border-radius:50%" src="/static/image/comment_avatar.jpg"/>
+              <span style="padding-top: 9px;padding-left: 10px;font-size: 13px;color: red">{{item.commentatorName}}</span>
+            </div>
+            <div style="height: 5px"></div>
+            <div style="display: flex;text-align: left">
+              <span style="font-size: 14px">@{{returnParent(item.parentId)}}   {{item.content}}</span>
+            </div>
+            <div style="height: 15px"></div>
+            <div style="display: flex">
+              <span style="font-size: 10px">{{new Date(item.time).getTime() | formatDate}}</span>
+            </div>
           </div>
-          <div style="height: 15px"></div>
-          <div style="display: flex">
-            <span style="font-size: 10px">{{new Date(item.time).getTime() | formatDate}}</span>
-          </div>
-        </div>
-        <div class="text-item" v-if="item.state === 2">
-          <div style="display: flex">
-            <img style="height: 38px;width: 38px;padding: 1px 1px 1px 1px;border-radius:50%" src="/static/image/comment_avatar.jpg"/>
-            <span style="padding-top: 9px;padding-left: 10px;font-size: 13px;color: red">{{item.commentatorName}}</span>
-          </div>
-          <div style="height: 5px"></div>
-          <div style="display: flex;text-align: left">
-            <span style="font-size: 14px">@{{returnParent(item.parentId)}}   {{item.content}}</span>
-          </div>
-          <div style="height: 15px"></div>
-          <div style="display: flex">
-            <span style="font-size: 10px">{{new Date(item.time).getTime() | formatDate}}</span>
-          </div>
-        </div>
-      </el-card>
+        </el-card>
+      </template>
     </div>
   </div>
 </template>
@@ -89,6 +93,7 @@
 <script>
 import {formatDate} from '../../../static/js/date.js'
 export default {
+  inject: ['reload'],
   name: 'ArticleDetail',
   data () {
     return {
@@ -105,7 +110,7 @@ export default {
   },
   filters: {
     formatDate (time) {
-      var date = new Date(time)
+      let date = new Date(time)
       return formatDate(date, 'yyyy-MM-dd hh:mm')
     }
   },
@@ -135,10 +140,10 @@ export default {
       }).then(resp => {
         if (resp.status === 200) {
           this.$message({
-            message: '评论成功',
+            message: '评论成功，待审核',
             type: 'success'
           })
-          this.loadComments()
+          this.reload()
         }
       })
     },
@@ -153,7 +158,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   @import '../../../static/css/mavon-markdown.css';
   .el-input__inner {
     border: none;

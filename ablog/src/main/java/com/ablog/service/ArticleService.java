@@ -71,7 +71,21 @@ public class ArticleService {
 
     public Page<Article> articles(Pageable pageable) {
 
-        return articleDAO.findAll(pageable);
+        Article article = new Article();
+        article.setState(0);
+
+        Specification<Article> specification = new Specification<Article>() {
+            @Override
+            public Predicate toPredicate(Root<Article> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+
+                List<Predicate> predicates = new ArrayList<Predicate>();
+                predicates.add(criteriaBuilder.equal(root.get("state").as(Integer.class),article.getState()));
+                Predicate[] predicates_ = new Predicate[predicates.size()];
+                return criteriaBuilder.and(predicates.toArray(predicates_));
+
+            }
+        };
+        return articleDAO.findAll(specification,pageable);
 
     }
 
@@ -96,7 +110,7 @@ public class ArticleService {
                     predicates.add(criteriaBuilder.equal(root.get("state").as(Integer.class),article.getState()));
                 }
                 predicates.add(criteriaBuilder.equal(articleCategoryJoin.get("categoryType").as(Integer.class),category.getCategoryType()));
-                System.out.println("list>>>" + predicates.size());
+                //System.out.println("list>>>" + predicates.size());
                 Predicate[] predicates_ = new Predicate[predicates.size()];
                 return criteriaBuilder.and(predicates.toArray(predicates_));
 
@@ -121,9 +135,50 @@ public class ArticleService {
     public List<Article> getArticlesByCid(Category category) {
 
         Sort sort = new Sort(Sort.Direction.DESC,"createTime");
-        List<Category> categoryList = new ArrayList<Category>();
-        categoryList.add(category);
-        return articleDAO.findArticlesByCategoryList(categoryList,sort);
+//        List<Category> categoryList = new ArrayList<Category>();
+//        categoryList.add(category);
+//        Article article = new Article();
+//        article.setState(0);
+//        return articleDAO.findArticlesByCategoryList(categoryList,sort);
+        Article article = new Article();
+        article.setState(0);
+
+        Specification<Article> specification = new Specification<Article>() {
+            @Override
+            public Predicate toPredicate(Root<Article> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+
+                List<Predicate> predicates = new ArrayList<Predicate>();
+                Join<Article,Category> articleCategoryJoin = root.join("categoryList",JoinType.LEFT);
+                predicates.add(criteriaBuilder.equal(articleCategoryJoin.get("id").as(Integer.class),category.getId()));
+                predicates.add(criteriaBuilder.equal(root.get("state").as(Integer.class),article.getState()));
+                //System.out.println("list>>>" + predicates.size());
+                Predicate[] predicates_ = new Predicate[predicates.size()];
+                return criteriaBuilder.and(predicates.toArray(predicates_));
+
+            }
+        };
+
+        return articleDAO.findAll(specification,sort);
+
+    }
+
+    public List<Article> allArticle(){
+
+        Article article = new Article();
+        article.setState(0);
+
+        Specification<Article> specification = new Specification<Article>() {
+            @Override
+            public Predicate toPredicate(Root<Article> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+
+                List<Predicate> predicates = new ArrayList<Predicate>();
+                predicates.add(criteriaBuilder.equal(root.get("state").as(Integer.class),article.getState()));
+                Predicate[] predicates_ = new Predicate[predicates.size()];
+                return criteriaBuilder.and(predicates.toArray(predicates_));
+
+            }
+        };
+        return articleDAO.findAll(specification);
 
     }
 }

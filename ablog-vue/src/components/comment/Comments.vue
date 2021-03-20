@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <el-card class="box-card">
     <el-table
       :data="comment"
       style="width: 100%">
       <el-table-column
         label="评论内容"
-        width="400">
+        width="330">
         <template slot-scope="scope">
           <span>{{ scope.row.content }}</span>
         </template>
@@ -40,6 +40,13 @@
         </template>
       </el-table-column>
       <el-table-column
+        label="评论人ip"
+        width="150">
+        <template slot-scope="scope">
+          <span style="margin-left: 10px">{{scope.row.commentatorIP}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
         label="评论状态"
         width="180">
         <template slot-scope="scope">
@@ -62,7 +69,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="220">
         <template slot-scope="scope">
           <el-button
             type="primary"
@@ -81,7 +88,7 @@
           <el-button
             size="small"
             type="danger"
-            @click="handleDelete(scope.$index, scope.row)" v-if="scope.row.state === 1 || scope.row.state === 2">
+            @click="handleDelete(scope.$index, scope.row)" >
             <i class="el-icon-delete"></i>
             删除
           </el-button>
@@ -89,14 +96,15 @@
       </el-table-column>
     </el-table>
     <el-pagination
+      @current-change="handleCurrentChange"
       style="text-align: right"
       background
       layout="prev, pager, next"
-      page-size="9"
+      :page-size="9"
       :current-page="currentPage"
       :total="totalRecord">
     </el-pagination>
-  </div>
+  </el-card>
 </template>
 
 <script>
@@ -107,13 +115,13 @@ export default {
     return {
       comment: [],
       pager: [],
-      totalRecord: '',
+      totalRecord: 0,
       currentPage: 1
     }
   },
   filters: {
     formatDate (time) {
-      var date = new Date(time)
+      let date = new Date(time)
       return formatDate(date, 'yyyy-MM-dd hh:mm')
     }
   },
@@ -173,6 +181,10 @@ export default {
           this.loadComments()
         }
       })
+    },
+    handleCurrentChange (currentPage) {
+      this.currentPage = currentPage
+      this.loadComments()
     }
   }
 }

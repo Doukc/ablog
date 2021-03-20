@@ -27,6 +27,8 @@ public class Comment {
     private int state;
     @Column(name = "COMMENT_PARENTID")
     private int parentId;
+    @Column(name = "COMMENT_COMMENTATORIP")
+    private String commentatorIP;
     @JsonIgnore
     @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)//可选属性optional=false,表示author不能为空。删除文章，不影响用户
     @JoinColumn(name="ARTICLE_ID")//设置在article表中的关联字段(外键)
@@ -94,6 +96,14 @@ public class Comment {
 
     public void setParentId(int parentId) {
         this.parentId = parentId;
+    }
+
+    public String getCommentatorIP() {
+        return commentatorIP;
+    }
+
+    public void setCommentatorIP(String commentatorIP) {
+        this.commentatorIP = commentatorIP;
     }
 
     public Article getArticle() {

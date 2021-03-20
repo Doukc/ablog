@@ -71,4 +71,10 @@ public class CommentService {
         commentDAO.deleteCommentByParentId(commentId);
 
     }
+
+    public List<Comment> allComment() {
+
+        return commentDAO.findAll();
+
+    }
 }

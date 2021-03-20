@@ -60,7 +60,7 @@ export default {
       })
     },
     articleDetail (id) {
-      this.$router.push({path: '/article/detail', query: {id: id}})
+      this.$router.push({path: '/ui/article/detail', query: {id: id}})
     }
   }
 }

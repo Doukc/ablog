@@ -40,7 +40,7 @@
             filterable
             remote
             reserve-keyword
-            multiple-limit="1"
+            :multiple-limit="1"
             placeholder="请输入文章分类"
             :remote-method="selectCategories"
             :loading="loading"
@@ -55,7 +55,7 @@
         </el-col>
       </el-form-item>
       <br/><br/>
-      <mavon-editor ref="editor" scrollStyle="true" @imgAdd="$imgAdd" v-model="form.doc" boxShadow="false"/>
+      <mavon-editor ref="editor" :scrollStyle="true" @imgAdd="$imgAdd" v-model="form.doc" :boxShadow="false"/>
       <br/>
       <el-form-item>
         <el-col :span="8">
@@ -85,7 +85,7 @@
               v-model="form.createTime"
               type="datetime"
               placeholder="选择日期时间"
-              readonly="true"
+              :readonly="true"
               style="width: 200px">
             </el-date-picker>
           </el-form-item>
@@ -96,7 +96,7 @@
             list-type="picture-card"
             :file-list="coverFile"
             :auto-upload="true"
-            limit="1"
+            :limit="1"
             :http-request="uploadCover">
             <i slot="default" class="el-icon-plus"></i>
             <div slot="file" slot-scope="{file}">
@@ -345,7 +345,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   #editor {
     margin: auto;
     width: 80%;

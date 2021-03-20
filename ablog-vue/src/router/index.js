@@ -10,6 +10,8 @@ import Articles from '../components/article/Articles'
 import ModifyArticle from '../components/article/ModifyArticle'
 import Comments from '../components/comment/Comments'
 import Categories from '../components/category/Categories'
+import OperateLog from '../components/security/OperateLog'
+import AdminMain from '../components/admin/AdminMain'
 
 Vue.use(Router)
 
@@ -17,63 +19,67 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '/',
-      name: 'Index',
-      redirect: '/index',
-      component: Index
-    },
-    {
-      path: '/home',
+      path: '/ui/home',
       name: 'Home',
-      redirect: '/index',
+      redirect: '/ui/index',
       component: Home,
       children: [
         {
-          path: '/index',
+          path: '/ui/index',
           name: 'Index',
           component: Index
         },
         {
-          path: '/article/detail',
+          path: '/ui/article/detail',
           name: 'ArticleDetail',
           component: ArticleDetail
         },
         {
-          path: '/categories',
+          path: '/ui/categories',
           name: 'Categories',
           component: Categories
         }
       ]
     },
     {
-      path: '/admin/index',
-      name: 'AdminIndex',
-      component: AdminIndex,
+      path: '/ui/admin',
+      name: 'AdminMain',
+      component: AdminMain,
       children: [
         {
-          path: '/admin/article/new',
+          path: '/ui/admin/index',
+          name: 'AdminIndex',
+          component: AdminIndex
+        },
+        {
+          path: '/ui/admin/article/new',
           name: 'NewArticle',
           component: NewArticle
         },
         {
-          path: '/admin/category',
+          path: '/ui/admin/category',
           name: 'Category',
           component: Category
         },
         {
-          path: '/admin/article/articles',
+          path: '/ui/admin/article/articles',
           name: 'Articles',
           component: Articles
         },
         {
-          path: '/admin/article/modify',
+          path: '/ui/admin/article/modify',
           name: 'ModifyArticle',
           component: ModifyArticle
         },
         {
-          path: '/admin/comment/comments',
+          path: '/ui/admin/comment/comments',
           name: 'Comments',
           component: Comments
+        },
+        {
+          path: '/ui/admin/security/log',
+          name: 'OperateLog',
+          component: OperateLog
         }
       ]
     }

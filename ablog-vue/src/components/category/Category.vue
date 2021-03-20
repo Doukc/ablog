@@ -146,7 +146,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .el-card__header{
     background-color: #7e57c2;
     padding: 5px 0px 5px 0px;

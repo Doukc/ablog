@@ -4,7 +4,7 @@
 <!--      <a href="javascript:;" @click="jumpPage">-->
 <!--        <img src="../../../static/image/ablog.png" style="height: 100px;margin-right: 1000px"/>-->
 <!--      </a>-->
-      <a href="/index">
+      <a href="/ui/index">
         <img src="../../../static/image/ablog.png" style="height: 100px;margin-right: 1000px"/>
       </a>
     </div>

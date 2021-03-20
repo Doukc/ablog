@@ -12,4 +12,6 @@ public interface ArticleDAO extends JpaRepository<Article,Integer>, JpaSpecifica
 
     List<Article> findArticlesByCategoryList(List<Category> categoryList, Sort sort);
 
+    List<Article> findArticlesByCategoryListAndState(List<Category> categoryList, Article article, Sort sort);
+
 }
